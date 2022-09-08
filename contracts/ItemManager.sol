@@ -21,7 +21,6 @@ contract ItemManager {
 
     uint256 index;
 
-
     enum SupplyChainSteps {
         Created,
         Paid,
@@ -42,7 +41,7 @@ contract ItemManager {
         items[index]._itemAdd = address(item);
         productArr.push(items[index]);
         emit SupplyChainStep(index, uint256(items[index]._step), address(item));
-      
+
         index++;
     }
 
@@ -51,21 +50,12 @@ contract ItemManager {
     }
 
     function getIndic() public view returns (S_Item[] memory) {
-        // return productArr;
-        return indexArr;
+        return productArr;
     }
 
-    // function getPrice(uint ind) public view returns(uint){
-    //     return items[ind].;
-    // }
-    // function getAddress(uint ind) public view returns(string memory){
-    //     return items[ind]._identifier;
-    // }
-
     function triggerPayment(uint256 _index) public payable {
-        Item item = items[_index]._item;
         require(items[_index]._priceInWei <= msg.value, "not fully paid");
-        require(item.priceInWei() == msg.value, "Not fully paid yet");
+
         require(
             items[_index]._step == SupplyChainSteps.Created,
             "Item is further in the supply chain"

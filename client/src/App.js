@@ -8,9 +8,9 @@ import classes from "./App.module.css";
 import Product from "./product";
 const App = () => {
   const [account, setAccount] = useState("");
-  const [owner,setOwner]=useState("");
+  const [owner, setOwner] = useState("");
   const [contract, setContract] = useState("");
-  const [ownerContract,setOwnerContract]=useState("");
+  const [ownerContract, setOwnerContract] = useState("");
   const [check, setCheck] = useState();
   const [product, setProduct] = useState("");
   const [products, setProducts] = useState([]);
@@ -39,25 +39,22 @@ const App = () => {
     return contract;
   };
 
-  const loadOwnerContract=async(web3)=>{
-   
+  const loadOwnerContract = async (web3) => {
     const networkId = await web3.eth.net.getId();
     console.log(networkId);
 
-    const networkData=Ownable.networks[networkId];
+    const networkData = Ownable.networks[networkId];
     console.log(networkData);
     const address = networkData.address;
     console.log(address);
-    const abi=Ownable.abi;
-    const contract=new web3.eth.Contract(abi,address);
+    const abi = Ownable.abi;
+    const contract = new web3.eth.Contract(abi, address);
     console.log(contract);
     setOwnerContract(contract);
     return contract;
-
-  }
-      // const networkId =  web3.eth.net.getId();
-      // console.log(networkId);
-
+  };
+  // const networkId =  web3.eth.net.getId();
+  // console.log(networkId);
 
   console.log(Ownable);
   console.log(contract);
@@ -65,8 +62,7 @@ const App = () => {
   const getOwner = async (contract) => {
     let n = await contract.methods.getOwner().call();
     setOwner(n);
-  console.log(n);
-
+    console.log(n);
   };
 
   // useEffect(()=>{
@@ -74,6 +70,7 @@ const App = () => {
     try {
       const res = await contract.methods.getIndic().call();
       setProducts(res);
+      console.log(res);
 
       // const res = await contract.methods.getProducts(check).call();
 
@@ -83,9 +80,8 @@ const App = () => {
     }
   };
 
- 
-  const prod = products.map((product) => product[2]);
-  console.log(prod);
+  // const prod = products.map((product) => product[2]);
+  // console.log(prod);
 
   const addproduct = async () => {
     const res = await contract.methods
@@ -106,29 +102,27 @@ const App = () => {
     const web3 = await getWeb3();
     await loadWeb3Account(web3);
     const contract = await loadWeb3Contract(web3);
-    const ownerContract=await loadOwnerContract(web3);
+    const ownerContract = await loadOwnerContract(web3);
     await getProduct(contract);
     await getOwner(ownerContract);
   }, []);
 
-  const Purchase = async() => {
-  //   ItemManager.events.SupplyChainStep().on("data",async )
-  //   console.log("worked");
-
-
+  const Purchase = async () => {
+    //   ItemManager.events.SupplyChainStep().on("data",async )
+    //   console.log("worked");
   };
 
   const sendBalance = () => {};
 
   return (
     <div className={classes.main}>
-    <div className={classes.navbar}>
-    <h2>Dhanush</h2>
- <h3>{owner}</h3>
-    </div>
-    <div className={classes.title}>
-    <h1>Supply Chain</h1>
-    </div>
+      <div className={classes.navbar}>
+        <h2>Dhanush</h2>
+        <h3>{owner}</h3>
+      </div>
+      <div className={classes.title}>
+        <h1>Supply Chain</h1>
+      </div>
 
       <div className={classes.wrapper}>
         <div className={classes.product}>
@@ -167,9 +161,15 @@ const App = () => {
         </div>
       </div>
       <div className={classes.products}>
-      {products.map((product,index) => (
-        <Product key={index} name={product[1]} cost={product[2]} getAddress={Purchase} />
-      ))}
+        {products.map((product, index) => (
+          <Product
+            key={index}
+            address={product[2]}
+            name={product[3]}
+            cost={product[4]}
+            getAddress={Purchase}
+          />
+        ))}
       </div>
     </div>
   );
