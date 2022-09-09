@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import ItemManager from "../src/contracts/ItemManager.json";
 import Ownable from "../src/contracts/Ownable.json";
 import getWeb3 from "./getWeb3";
+import Web3 from "web3";
+// import {ethers} from "ethers";
 
 import classes from "./App.module.css";
 import Product from "./product";
@@ -107,9 +109,34 @@ const App = () => {
     await getOwner(ownerContract);
   }, []);
 
-  const Purchase = async () => {
-    //   ItemManager.events.SupplyChainStep().on("data",async )
-    //   console.log("worked");
+  const Purchase = async (address, cost) => {
+    //   const web3 = await getWeb3();
+    const amount = Web3.utils.fromWei(cost, "ether");
+
+    console.log(address);
+    if (window.ethereum) {
+      // window.ethereum.pop
+      let transactionparam = {
+        to: address,
+        from: account,
+        gas: "120980",
+        value: "0x29a2241af62c0000",
+      };
+      window.ethereum
+        .request({ method: "eth_sendTransaction", params: [transactionparam] })
+        .then((res) => console.log(res));
+
+      // method: "eth_requestAccounts"
+      //   window.ethereum
+      //     .request({ method: "eth_accounts" })
+      //     .then((res) => console.log(res));
+      //   console.log("detected");
+      // } else {
+      //   console.log("not detefddas");
+      // }
+      //   ItemManager.events.SupplyChainStep().on("data",async )
+      //   console.log("worked");
+    }
   };
 
   const sendBalance = () => {};
@@ -167,7 +194,7 @@ const App = () => {
             address={product[2]}
             name={product[3]}
             cost={product[4]}
-            getAddress={Purchase}
+            buyProduct={Purchase}
           />
         ))}
       </div>

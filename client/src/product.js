@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./product.module.css";
-const Product = ({ name, cost, getAddress, address }) => {
+const Product = ({ name, cost, buyProduct, address }) => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.content}>{name}</div>
@@ -11,7 +11,7 @@ const Product = ({ name, cost, getAddress, address }) => {
         <p>{address}</p>
       </div>
       <div>
-        <button onClick={getAddress}>buy</button>
+        <button onClick={()=>buyProduct(address,cost)}>buy</button>
       </div>
     </div>
   );
