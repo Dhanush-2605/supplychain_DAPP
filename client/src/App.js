@@ -5,6 +5,7 @@ import Ownable from "../src/contracts/Ownable.json";
 import getWeb3 from "./getWeb3";
 import Web3 from "web3";
 // import {ethers} from "ethers";
+import { Route, Routes } from "react-router-dom";
 
 import classes from "./App.module.css";
 import Product from "./product";
@@ -111,20 +112,24 @@ const App = () => {
 
   const Purchase = async (address, cost) => {
     //   const web3 = await getWeb3();
-    const amount = Web3.utils.fromWei(cost, "ether");
+    // const amount = Web3.utils.fromWei(cost, 'ether')
 
-    console.log(address);
-    if (window.ethereum) {
+    // console.log(amount);
+
+
+    // console.log(address);
+    // if (window.ethereum) {
       // window.ethereum.pop
-      let transactionparam = {
-        to: address,
-        from: account,
-        gas: "120980",
-        value: "0x29a2241af62c0000",
-      };
-      window.ethereum
-        .request({ method: "eth_sendTransaction", params: [transactionparam] })
-        .then((res) => console.log(res));
+      // let params=[{
+      
+      //   "from":account,
+      //   "to": address,
+   
+      //   "value":"0x38D7EA4C68000",
+      // }];
+   const res=await window.ethereum.request({ method: 'eth_requestAccounts' })
+   console.log(res);
+        
 
       // method: "eth_requestAccounts"
       //   window.ethereum
@@ -136,16 +141,24 @@ const App = () => {
       // }
       //   ItemManager.events.SupplyChainStep().on("data",async )
       //   console.log("worked");
-    }
+    // }
   };
+
+  // "gasPrice": "0x09184e72a000",
 
   const sendBalance = () => {};
 
   return (
     <div className={classes.main}>
       <div className={classes.navbar}>
-        <h2>Dhanush</h2>
-        <h3>{owner}</h3>
+        <div>
+          {" "}
+          <h2>Dhanush</h2>
+        </div>
+        <div>
+          {" "}
+          <h3>{owner}</h3>
+        </div>
       </div>
       <div className={classes.title}>
         <h1>Supply Chain</h1>
@@ -171,12 +184,14 @@ const App = () => {
             ></input>
           </div>
           <div>
-            <button onClick={addproduct}>submit</button>
+            <button onClick={addproduct} className={classes.submitButton}>
+              create product
+            </button>
           </div>
         </div>
 
         <div>
-          <div>
+          {/* <div>
             <input
               placeholder="ind"
               onChange={(event) => {
@@ -184,10 +199,16 @@ const App = () => {
               }}
             ></input>
             <button>get amount</button>
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className={classes.products}>
+      <div>
+        <a href="/products">
+          <button className={classes.button}>Products</button>
+        </a>
+      </div>
+
+      {/* <div className={classes.products}>
         {products.map((product, index) => (
           <Product
             key={index}
@@ -197,13 +218,21 @@ const App = () => {
             buyProduct={Purchase}
           />
         ))}
-      </div>
+      </div> */}
+      <Routes>
+        <Route
+          path="/products"
+          element={<Product products={products} buyProduct={Purchase} />}
+        />
+      </Routes>
     </div>
   );
 };
 
 export default App;
 
-// background: #0F2027;  /* fallback for old browsers */
-// background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
-// background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    //  "gasPrice": "0x1e",
+
+        
+    //     "gas": "0xc350",

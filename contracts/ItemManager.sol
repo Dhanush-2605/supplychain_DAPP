@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "./Item.sol";
 import "./Ownable.sol";
 
-contract ItemManager {
+contract ItemManager is Ownable {
     struct S_Item {
         Item _item;
         ItemManager.SupplyChainSteps _step;
