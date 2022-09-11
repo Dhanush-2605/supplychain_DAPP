@@ -34,9 +34,11 @@
   justify-content: space-around;
   align-items: center;
 
-  width: 50vw;
+  width: 25vw;
   flex-direction: column;
   height: 300px;
+  border:1px solid black;
+  margin:20px 0px;
   /* height: 50vw; */
 }
 .product input {

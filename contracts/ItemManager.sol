@@ -10,6 +10,7 @@ contract ItemManager is Ownable {
     struct S_Item {
         Item _item;
         ItemManager.SupplyChainSteps _step;
+        uint256 _index;       
         address _itemAdd;
         string _identifier;
         uint256 _priceInWei;
@@ -39,11 +40,13 @@ contract ItemManager is Ownable {
         items[index]._step = SupplyChainSteps.Created;
         items[index]._identifier = _identifier;
         items[index]._itemAdd = address(item);
+        items[index]._index=index;
         productArr.push(items[index]);
         emit SupplyChainStep(index, uint256(items[index]._step), address(item));
 
         index++;
     }
+    
 
     function getProducts(uint256 ind) public view returns (string memory) {
         return items[ind]._identifier;
@@ -51,6 +54,9 @@ contract ItemManager is Ownable {
 
     function getIndic() public view returns (S_Item[] memory) {
         return productArr;
+    }
+    function getIndex() public view returns (uint){
+        return index;
     }
 
     function triggerPayment(uint256 _index) public payable {

@@ -19,7 +19,6 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [price, serPrice] = useState(0);
   const [amount, setAmount] = useState(0);
-  // const [product, setNe] = useState();
 
   const [address, setAddress] = useState("");
 
@@ -29,7 +28,6 @@ const App = () => {
       setAccount(accounts[0]);
     }
   };
-  console.log(ItemManager);
 
   const loadWeb3Contract = async (web3) => {
     const networkId = await web3.eth.net.getId();
@@ -56,11 +54,6 @@ const App = () => {
     setOwnerContract(contract);
     return contract;
   };
-  // const networkId =  web3.eth.net.getId();
-  // console.log(networkId);
-
-  console.log(Ownable);
-  console.log(contract);
 
   const getOwner = async (contract) => {
     let n = await contract.methods.getOwner().call();
@@ -68,23 +61,17 @@ const App = () => {
     console.log(n);
   };
 
-  // useEffect(()=>{
   const getProduct = async (contract) => {
     try {
       const res = await contract.methods.getIndic().call();
       setProducts(res);
       console.log(res);
 
-      // const res = await contract.methods.getProducts(check).call();
-
       console.log(res);
     } catch (err) {
       console.log(err);
     }
   };
-
-  // const prod = products.map((product) => product[2]);
-  // console.log(prod);
 
   const addproduct = async () => {
     const res = await contract.methods
@@ -100,6 +87,11 @@ const App = () => {
   };
 
   console.log(products);
+const getIndex=async()=>{
+  const res=await contract.methods.getIndex().call();
+  console.log(res);
+
+}
 
   useEffect(async () => {
     const web3 = await getWeb3();
@@ -110,38 +102,21 @@ const App = () => {
     await getOwner(ownerContract);
   }, []);
 
-  const Purchase = async (address, cost) => {
-    //   const web3 = await getWeb3();
-    // const amount = Web3.utils.fromWei(cost, 'ether')
+  const Purchase = async (ind, address, cost) => {
+    console.log(ind);
+    console.log(cost);
+    console.log(address);
+    const res = await contract.methods
+      .triggerPayment(ind)
+      .send({ to: address, from: account, value: cost, gas: 500000 });
+    console.log(res);
 
-    // console.log(amount);
+    if (res.transactionHash) {
+      alert("Transaction Sucessfull");
+    } else {
+      alert("Tranaction Failed");
+    }
 
-
-    // console.log(address);
-    // if (window.ethereum) {
-      // window.ethereum.pop
-      // let params=[{
-      
-      //   "from":account,
-      //   "to": address,
-   
-      //   "value":"0x38D7EA4C68000",
-      // }];
-   const res=await window.ethereum.request({ method: 'eth_requestAccounts' })
-   console.log(res);
-        
-
-      // method: "eth_requestAccounts"
-      //   window.ethereum
-      //     .request({ method: "eth_accounts" })
-      //     .then((res) => console.log(res));
-      //   console.log("detected");
-      // } else {
-      //   console.log("not detefddas");
-      // }
-      //   ItemManager.events.SupplyChainStep().on("data",async )
-      //   console.log("worked");
-    // }
   };
 
   // "gasPrice": "0x09184e72a000",
@@ -191,6 +166,7 @@ const App = () => {
         </div>
 
         <div>
+
           {/* <div>
             <input
               placeholder="ind"
@@ -208,17 +184,6 @@ const App = () => {
         </a>
       </div>
 
-      {/* <div className={classes.products}>
-        {products.map((product, index) => (
-          <Product
-            key={index}
-            address={product[2]}
-            name={product[3]}
-            cost={product[4]}
-            buyProduct={Purchase}
-          />
-        ))}
-      </div> */}
       <Routes>
         <Route
           path="/products"
@@ -231,8 +196,6 @@ const App = () => {
 
 export default App;
 
+//  "gasPrice": "0x1e",
 
-    //  "gasPrice": "0x1e",
-
-        
-    //     "gas": "0xc350",
+//     "gas": "0xc350",
