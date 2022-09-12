@@ -6,7 +6,7 @@ import getWeb3 from "./getWeb3";
 import Web3 from "web3";
 // import {ethers} from "ethers";
 import { Route, Routes } from "react-router-dom";
-
+import Detail from "./detail";
 import classes from "./App.module.css";
 import Product from "./product";
 const App = () => {
@@ -60,7 +60,10 @@ const App = () => {
     setOwner(n);
     console.log(n);
   };
-
+const productDetails= async()=>{
+  const res=await contract.methods.getProduct("0xa4469c0765FD6a305cEe1D519c95CD7119d5547E").call();
+  console.log(res);
+}
   const getProduct = async (contract) => {
     try {
       const res = await contract.methods.getIndic().call();
@@ -106,9 +109,11 @@ const getIndex=async()=>{
     console.log(ind);
     console.log(cost);
     console.log(address);
+    // const gasPrice = await Web3.eth.getGasPrice();
+    // const fee=
     const res = await contract.methods
-      .triggerPayment(ind)
-      .send({ to: address, from: account, value: cost, gas: 500000 });
+      .triggerPayment(ind,address)
+      .send({ to: address, from: account, value: cost, gas: 995700,gasPrice: 12345 });
     console.log(res);
 
     if (res.transactionHash) {
@@ -127,11 +132,11 @@ const getIndex=async()=>{
     <div className={classes.main}>
       <div className={classes.navbar}>
         <div>
-          {" "}
+      
           <h2>Dhanush</h2>
         </div>
         <div>
-          {" "}
+
           <h3>{owner}</h3>
         </div>
       </div>
@@ -165,7 +170,10 @@ const getIndex=async()=>{
           </div>
         </div>
 
+
         <div>
+        <input placeholder="address"></input>
+        <button onClick={productDetails}>get data</button>
 
           {/* <div>
             <input
@@ -189,7 +197,9 @@ const getIndex=async()=>{
           path="/products"
           element={<Product products={products} buyProduct={Purchase} />}
         />
+        <Route path="/productstats" element={<Detail />}/>
       </Routes>
+      <Detail />
     </div>
   );
 };

@@ -2,6 +2,9 @@ import React from "react";
 import classes from "./product.module.css";
 import Web3 from "web3";
 const Product = ({ products,buyProduct }) => {
+  const getStats=()=>{
+
+  }
   console.log(products);
   return (
     <div className={classes.container}>
@@ -16,6 +19,7 @@ const Product = ({ products,buyProduct }) => {
           </div>
           <div>
             <button onClick={()=>buyProduct(product[2],product[3],product[5])}>buy</button>
+            {/* <button onClick={()=>getStats(product[4],product[3])}>Get Stats</button> */}
           </div>
         </div>
       ))}

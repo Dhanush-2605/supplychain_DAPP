@@ -15,9 +15,17 @@ contract ItemManager is Ownable {
         string _identifier;
         uint256 _priceInWei;
     }
+    struct ProductDetails{       
+        uint256 _count;
+        uint256 _total;
+    }
+    mapping(address => ProductDetails) public productData;
     S_Item[] public indexArr;
     S_Item[] public productArr;
+    // ProductDetails[] public productDetailsArr;
 
+   
+    
     mapping(uint256 => S_Item) public items;
 
     uint256 index;
@@ -52,6 +60,11 @@ contract ItemManager is Ownable {
         return items[ind]._identifier;
     }
 
+    function getProduct(address _address) public view returns(ProductDetails memory){
+        return productData[_address];
+
+    }
+
     function getIndic() public view returns (S_Item[] memory) {
         return productArr;
     }
@@ -59,14 +72,16 @@ contract ItemManager is Ownable {
         return index;
     }
 
-    function triggerPayment(uint256 _index) public payable {
-        require(items[_index]._priceInWei <= msg.value, "not fully paid");
+    function triggerPayment(uint256 _index,address _address) public payable {
+        require(items[_index]._priceInWei == msg.value, "not fully paid");
 
         require(
             items[_index]._step == SupplyChainSteps.Created,
             "Item is further in the supply chain"
         );
         items[_index]._step = SupplyChainSteps.Paid;
+        productData[_address]._count+=1;
+        productData[_address]._total+=msg.value;
         emit SupplyChainStep(
             _index,
             uint256(items[_index]._step),
