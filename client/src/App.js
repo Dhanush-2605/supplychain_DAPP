@@ -12,6 +12,8 @@ import Product from "./product";
 const App = () => {
   const [account, setAccount] = useState("");
   const [owner, setOwner] = useState("");
+  const [curInd,setCurInd]=useState("");
+  const [curName,setCurName]=useState("");
   const [contract, setContract] = useState("");
   const [ownerContract, setOwnerContract] = useState("");
   const [check, setCheck] = useState();
@@ -19,15 +21,23 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [price, serPrice] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [web3,setWeb3]=useState();
+  const [hash,setHash]=useState();
+  const [confirm,setConfirm]=useState("");
 
   const [address, setAddress] = useState("");
-
+  // let web3;
+  // const Initialize=async()=>{
+  //   web3=await getWeb3();
+  // }
+  console.log(web3);
   const loadWeb3Account = async (web3) => {
     const accounts = await web3.eth.getAccounts();
     if (accounts) {
       setAccount(accounts[0]);
     }
   };
+
 
   const loadWeb3Contract = async (web3) => {
     const networkId = await web3.eth.net.getId();
@@ -60,10 +70,12 @@ const App = () => {
     setOwner(n);
     console.log(n);
   };
-const productDetails= async()=>{
-  const res=await contract.methods.getProduct("0xa4469c0765FD6a305cEe1D519c95CD7119d5547E").call();
-  console.log(res);
-}
+  const productDetails = async () => {
+    const res = await contract.methods
+      .getProduct("0xa4469c0765FD6a305cEe1D519c95CD7119d5547E")
+      .call();
+    console.log(res);
+  };
   const getProduct = async (contract) => {
     try {
       const res = await contract.methods.getIndic().call();
@@ -90,53 +102,165 @@ const productDetails= async()=>{
   };
 
   console.log(products);
-const getIndex=async()=>{
-  const res=await contract.methods.getIndex().call();
-  console.log(res);
-
-}
+  const getIndex = async () => {
+    const res = await contract.methods.getIndex().call();
+    console.log(res);
+  };
 
   useEffect(async () => {
     const web3 = await getWeb3();
+    setWeb3(web3);
+    console.log(web3.eth);
     await loadWeb3Account(web3);
     const contract = await loadWeb3Contract(web3);
     const ownerContract = await loadOwnerContract(web3);
     await getProduct(contract);
     await getOwner(ownerContract);
+  
   }, []);
-
-  const Purchase = async (ind, address, cost) => {
+  // useEffect(()=>{
+  //    Initialize();
+  // })
+  const Purchase = async (name,ind,amount) => {
+    // const web3 = await getWeb3();
+    // setCurInd(ind);
+    // setCurAmount(amount);
     console.log(ind);
-    console.log(cost);
-    console.log(address);
-    // const gasPrice = await Web3.eth.getGasPrice();
-    // const fee=
-    const res = await contract.methods
-      .triggerPayment(ind,address)
-      .send({ to: address, from: account, value: cost, gas: 995700,gasPrice: 12345 });
-    console.log(res);
+    console.log(amount);
+    const price=parseInt(amount,10);
+    // const index=parseInt(ind,);
+    if(typeof price==='string'){
+      console.log("string");
+    }
+    console.log(web3);
+    try{
+    const res = await web3.eth.sendTransaction({
+      from: "0xafa7446a4C7c90705B7c9dc1F36c12a7F3514D50",
+      to: "0xaaAf647085AA01941d77df2E002afDFe0740Ed03",
+      value: amount,
+    });
+    // },function(error,hash){
+    //   if (error){
+    //     console.log(error);
+    //   }else{
+    //     if (hash){
+    //       let res=window.confirm();
+    //       setConfirm(res);
+    //       setHash(hash)
+    //     }
+    //   }
 
-    if (res.transactionHash) {
-      alert("Transaction Sucessfull");
-    } else {
-      alert("Tranaction Failed");
+    // });
+    console.log(res);
+    // if (res){
+    //       let res=window.confirm();
+    //       setConfirm(res);
+    //       // setHash(hash)
+    // }
+
+    if (res){
+     const res = await contract.methods.Stats(ind,amount).send({from:account});
+    console.log(res);     
+    }else{
+      console.log("error");
+
     }
 
+  }catch(err){
+    console.log(err);
+  }
+//  console.log(hash);
+//  if (){
+//   try{
+//     const res = await contract.methods.Stats(ind,amount).call();
+//     console.log(res);
+
+//   }catch(err){
+//     console.log(err);
+
+//   }
+//  }
+
   };
+  // useEffect(()=>{
+  //   const updateStats=async()=>{
+  //   console.log(confirm);
+  //   if (confirm==true){
+  //     console.log("inside");
+  //   const res = await contract.methods.Stats(curInd,curAmount).call();
+  //   console.log(res);
+  //   setCurInd("");
+  //   setCurAmount("")
+  //   }
+
+  //   setConfirm(false);
+  // }
+  // updateStats();
+
+  // },[confirm])
+  const getStats=(name,ind)=>{
+
+    // let res=window.confirm("lol");
+    setCurInd(ind);
+    setCurName(name);
+    console.log(ind);
+    console.log(name);
+    // if (confirm)
+
+
+  }
+  // const Purchase = async (ind, cost) => {
+  //   console.log(ind);
+  //   console.log(cost);
+  //   console.log(address);
+  //   const address = "0xaaAf647085AA01941d77df2E002afDFe0740Ed03";
+  //   // const gasPrice = await Web3.eth.getGasPrice();
+  //   // const fee=
+  //   try {
+  //     const res = await contract.methods
+  //       .triggerPayment(ind)
+  //       .send({
+  //         to: address,
+  //         from: account,
+  //         value: cost,
+  //         gas: 995700,
+  //         gasPrice: 12345,
+  //       });
+
+  //     console.log(res);
+
+  //     if (res.transactionHash) {
+  //       alert("Transaction Sucessfull");
+  //     } else {
+  //       alert("Tranaction Failed");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // "gasPrice": "0x09184e72a000",
 
-  const sendBalance = () => {};
+  const getProductss = async() => {
+    try{
+      const res = await contract.methods.getProduct(1).call();
+      console.log(res);
+
+
+    }catch(err){
+
+    }
+
+
+  };
 
   return (
     <div className={classes.main}>
       <div className={classes.navbar}>
         <div>
-      
           <h2>Dhanush</h2>
         </div>
         <div>
-
           <h3>{owner}</h3>
         </div>
       </div>
@@ -170,10 +294,12 @@ const getIndex=async()=>{
           </div>
         </div>
 
-
         <div>
-        <input placeholder="address"></input>
-        <button onClick={productDetails}>get data</button>
+        <div>
+        <button onClick={getProductss}>confirm</button>
+        </div>
+          {/* <input placeholder="address"></input> */}
+          {/* <button onClick={getETH}>get data</button> */}
 
           {/* <div>
             <input
@@ -195,11 +321,11 @@ const getIndex=async()=>{
       <Routes>
         <Route
           path="/products"
-          element={<Product products={products} buyProduct={Purchase} />}
+          element={<Product products={products} getStats={getStats} buyProduct={Purchase}/>}
         />
-        <Route path="/productstats" element={<Detail />}/>
+        <Route path="/productstats" element={<Detail index={curInd} name={curName}/>} />
       </Routes>
-      <Detail />
+      {/* <Detail /> */}
     </div>
   );
 };

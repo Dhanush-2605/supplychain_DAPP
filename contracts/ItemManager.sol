@@ -10,19 +10,19 @@ contract ItemManager is Ownable {
     struct S_Item {
         Item _item;
         ItemManager.SupplyChainSteps _step;
-        uint256 _index;       
-        address _itemAdd;
+        uint256 _index;     
+    
         string _identifier;
         uint256 _priceInWei;
     }
     struct ProductDetails{       
-        uint256 _count;
-        uint256 _total;
+        uint _count;
+        uint _total;
     }
-    mapping(address => ProductDetails) public productData;
-    S_Item[] public indexArr;
+    mapping(uint256 => ProductDetails) public productData;
+    // S_Item[] public indexArr;
     S_Item[] public productArr;
-    // ProductDetails[] public productDetailsArr;
+
 
    
     
@@ -44,10 +44,11 @@ contract ItemManager is Ownable {
 
     function createItem(string memory _identifier, uint256 _priceInWei) public {
         Item item = new Item(this, _priceInWei, index);
+        items[index]._item = item;
+
         items[index]._priceInWei = _priceInWei;
         items[index]._step = SupplyChainSteps.Created;
-        items[index]._identifier = _identifier;
-        items[index]._itemAdd = address(item);
+        items[index]._identifier = _identifier;       
         items[index]._index=index;
         productArr.push(items[index]);
         emit SupplyChainStep(index, uint256(items[index]._step), address(item));
@@ -60,10 +61,12 @@ contract ItemManager is Ownable {
         return items[ind]._identifier;
     }
 
-    function getProduct(address _address) public view returns(ProductDetails memory){
-        return productData[_address];
+    function getProduct(uint256 _ind) public view returns(ProductDetails memory){
+        return productData[_ind];
 
     }
+
+  
 
     function getIndic() public view returns (S_Item[] memory) {
         return productArr;
@@ -72,21 +75,14 @@ contract ItemManager is Ownable {
         return index;
     }
 
-    function triggerPayment(uint256 _index,address _address) public payable {
-        require(items[_index]._priceInWei == msg.value, "not fully paid");
 
-        require(
-            items[_index]._step == SupplyChainSteps.Created,
-            "Item is further in the supply chain"
-        );
-        items[_index]._step = SupplyChainSteps.Paid;
-        productData[_address]._count+=1;
-        productData[_address]._total+=msg.value;
-        emit SupplyChainStep(
-            _index,
-            uint256(items[_index]._step),
-            address(items[_index]._item)
-        );
+
+    function Stats(uint256 ind,uint256 amount) public{
+  
+        productData[ind]._count+=1;
+        productData[ind]._total+=amount;
+
+
     }
 
     function triggerDelivery(uint256 _index) public {

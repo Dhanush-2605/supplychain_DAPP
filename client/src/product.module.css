@@ -53,3 +53,19 @@
 
 
 }
+.buttondiv{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 240px;
+}
+.details button{
+  border: none;
+  padding: 10px 30px;
+  background-color: #42ba96;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
