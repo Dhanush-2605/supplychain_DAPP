@@ -19,11 +19,11 @@ const Product = ({ products,buyProduct,getStats }) => {
 
           </div>
           <div className={classes.details}>
-          <Link to="/productstats">
-          <button>lol</button>
+          <Link to={`/productstats/${product[2]}/${product[3]}`}>
+          <button>get stats</button>
 
           </Link>
-          <button  onClick={()=>getStats(product[3],product[2])}>Get Stats</button>
+          {/* <button  onClick={()=>getStats(product[3],product[2])}>Get Stats</button> */}
 
           </div>
           </div>

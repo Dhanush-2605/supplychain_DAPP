@@ -1,8 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./detail.module.css";
-const Detail = ({name,index}) => {
-  console.log(index);
-  console.log(name);
+import { useParams } from "react-router-dom";
+import getWeb3 from "./getWeb3";
+import Web3 from "web3";
+import ItemManager from "../src/contracts/ItemManager.json";
+const Detail = ({contract}) => {
+  // const [web3,set]
+  console.log(contract.methods);
+  const [stats,setStats]=useState([]);
+  // const getStats=async(web3)=>{
+  //   const res=await 
+
+  // }
+  const params=useParams();
+  const ind=params.ind;
+  console.log(ind);
+
+  // console.log();
+
+  useEffect(()=>{
+    // const web3 = await getWeb3();
+    // await getStats(web3);
+
+ const getStats=async()=>{
+
+  
+  try{
+    const res=await contract.methods.getProduct(params.ind).call();
+    setStats(res);
+    console.log(res);
+  }catch(err){
+    console.log(err);
+  }
+
+  }
+  getStats();
+
+  },[])
+  
+
+
+
+
+
   return (
     <div className={classes.container}>
     <div className={classes.heading}>
@@ -10,8 +50,9 @@ const Detail = ({name,index}) => {
     
     </div>
       <div className={classes.wrapper}>
+      
         <div className={classes.content}>
-          <h3>car</h3>
+          <h3>{params.name}</h3>
         </div>
         <div className={classes.content}>
           <div>
@@ -23,7 +64,7 @@ const Detail = ({name,index}) => {
         </div>
         <div className={classes.quantity}>
         <div className={classes.insidequantity}> <h3>Quantity</h3></div>
-        <div><p>4</p></div>
+        <div><p>{stats[0]}</p></div>
          
           
         </div>
@@ -34,11 +75,12 @@ const Detail = ({name,index}) => {
           <div>
         
             <p>
-              9000000<span>ETH</span>
+            {parseInt(stats[0],10)*parseInt(stats[1],10)} <span>WEI</span>
             </p>
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
