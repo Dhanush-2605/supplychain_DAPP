@@ -4,53 +4,43 @@ import { useParams } from "react-router-dom";
 import getWeb3 from "./getWeb3";
 import Web3 from "web3";
 import ItemManager from "../src/contracts/ItemManager.json";
-const Detail = ({contract}) => {
-  // const [web3,set]
+const Detail = ({ contract }) => {
   console.log(contract.methods);
-  const [stats,setStats]=useState([]);
-  // const getStats=async(web3)=>{
-  //   const res=await 
+  const [stats, setStats] = useState([]);
+  const [web3, seteb3] = useState();
 
-  // }
-  const params=useParams();
-  const ind=params.ind;
+  const params = useParams();
+  const ind = params.ind;
   console.log(ind);
 
-  // console.log();
-
-  useEffect(()=>{
-    // const web3 = await getWeb3();
-    // await getStats(web3);
-
- const getStats=async()=>{
-
-  
-  try{
-    const res=await contract.methods.getProduct(params.ind).call();
-    setStats(res);
-    console.log(res);
-  }catch(err){
-    console.log(err);
+  useEffect(() => {
+    const getStats = async () => {
+      try {
+        const res = await contract.methods.getProduct(params.ind).call();
+        setStats(res);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getStats();
+  }, []);
+  let etherValue;
+  if (stats.length != 0) {
+    let val = stats[1];
+    etherValue = Web3.utils.fromWei(val, "ether");
+    console.log(etherValue);
   }
-
-  }
-  getStats();
-
-  },[])
-  
-
-
-
-
 
   return (
     <div className={classes.container}>
-    <div className={classes.heading}>
-    <div>  <h2>Stats</h2></div>
-    
-    </div>
+      <div className={classes.heading}>
+        <div>
+          {" "}
+          <h2>Stats</h2>
+        </div>
+      </div>
       <div className={classes.wrapper}>
-      
         <div className={classes.content}>
           <h3>{params.name}</h3>
         </div>
@@ -63,24 +53,25 @@ const Detail = ({contract}) => {
           </div>
         </div>
         <div className={classes.quantity}>
-        <div className={classes.insidequantity}> <h3>Quantity</h3></div>
-        <div><p>{stats[0]}</p></div>
-         
-          
+          <div className={classes.insidequantity}>
+            {" "}
+            <h3>Quantity</h3>
+          </div>
+          <div>
+            <p>{stats[0]}</p>
+          </div>
         </div>
         <div className={classes.content}>
           <div className={classes.insideprice}>
-              <h3>Total Amount</h3>
+            <h3>Total Amount</h3>
           </div>
           <div>
-        
             <p>
-            {parseInt(stats[0],10)*parseInt(stats[1],10)} <span>WEI</span>
+              {etherValue} <span>ETH</span>
             </p>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

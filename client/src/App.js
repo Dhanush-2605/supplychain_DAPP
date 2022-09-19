@@ -30,18 +30,22 @@ const App = () => {
 
   console.log(web3);
   const loadWeb3Account = async (web3) => {
-    const accounts = await web3.eth.getAccounts();
-    if (accounts) {
-      setAccount(accounts[0]);
+    const account = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    if (account) {
+      setAccount(account[0]);
     }
   };
-  console.log(contract);
+  console.log("cureent account is");
+  console.log(account);
 
   const loadWeb3Contract = async (web3) => {
     const networkId = await web3.eth.net.getId();
     const networkData = ItemManager.networks[networkId];
     const address = networkData.address;
-    console.log(address);
+
     const abi = ItemManager.abi;
     const contract = new web3.eth.Contract(abi, address);
     setContract(contract);
@@ -70,7 +74,6 @@ const App = () => {
       .call();
     console.log(res);
   };
-
 
   const addproduct = async () => {
     const res = await contract.methods
@@ -106,7 +109,7 @@ const App = () => {
   useEffect(async () => {
     const web3 = await getWeb3();
     setWeb3(web3);
-    console.log(web3.eth);
+
     await loadWeb3Account(web3);
     const contract = await loadWeb3Contract(web3);
     const ownerContract = await loadOwnerContract(web3);
@@ -115,7 +118,6 @@ const App = () => {
   }, []);
 
   const Purchase = async (name, ind, amount) => {
-   
     console.log(ind);
     console.log(amount);
     const price = parseInt(amount, 10);
@@ -130,33 +132,33 @@ const App = () => {
         to: "0xaaAf647085AA01941d77df2E002afDFe0740Ed03",
         value: amount,
       });
-  
-      console.log(res);
 
+      console.log(res);
 
       if (res) {
         const res = await contract.methods
           .Stats(ind, amount)
           .send({ from: account });
         console.log(res);
+        alert(
+          "Transaction Successfull Product Will Be Delivered To Your Address  " +
+            account
+        );
       } else {
         console.log("error");
       }
     } catch (err) {
       console.log(err);
     }
-
   };
 
   const getStats = (name, ind) => {
- ;
     setCurInd(ind);
     setCurName(name);
     console.log(ind);
     console.log(name);
-   
   };
-  
+
   const getProductss = async () => {
     try {
       const res = await contract.methods.getProduct(1).call();

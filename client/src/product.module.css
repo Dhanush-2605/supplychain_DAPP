@@ -1,4 +1,4 @@
-.container{
+.container {
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -16,10 +16,11 @@
   font-weight: 500;
   font-size: 30px;
   margin-top: 50px;
- 
+
   /* box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;} */
   border: 1px solid black;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 .wrapper button {
   border: none;
@@ -40,32 +41,29 @@
   font-size: 20px;
 }
 
-.address{
+.address {
   /* display: flex;
   align-items: center;
   justify-content: center;
   width: 350px; */
   /* background-color: rebeccapurple; */
 }
-.address p{
+.address p {
   font-size: 20px;
   word-break: break-all;
-
-
 }
-.buttondiv{
+.buttondiv {
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 240px;
 }
-.details button{
+.details button {
   border: none;
   padding: 10px 30px;
   background-color: #42ba96;
   color: white;
   border-radius: 5px;
   cursor: pointer;
-
 }
